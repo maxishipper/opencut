@@ -33,6 +33,22 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <BotIdClient protect={protectedRoutes} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(A, opts){
+                window.Sonarly = { opts: opts, queue: [[0]] };
+                var s = document.createElement('script');
+                s.src = A;
+                s.async = true;
+                document.head.appendChild(s);
+              })("https://sonarly.dev/static/tracker.js", {
+                projectKey: "FLZBdhwHPsjgSKLMpyd8",
+                ingestPoint: "https://sonarly.dev/ingest"
+              });
+            `,
+          }}
+        />
       </head>
       <body className={`${defaultFont.className} font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="dark">

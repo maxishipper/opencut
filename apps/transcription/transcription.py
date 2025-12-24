@@ -1,5 +1,15 @@
 import modal
 from pydantic import BaseModel
+import sentry_sdk
+
+sentry_sdk.init(
+    dsn="https://FLZBdhwHPsjgSKLMpyd8@sonarly.dev/127",
+    traces_sample_rate=1.0,
+    environment="production",
+)
+
+# 🚀 Instant detection - sends ping when server starts
+sentry_sdk.capture_message("sonarly-backend-installed", "info")
 
 app = modal.App("opencut-transcription")
 

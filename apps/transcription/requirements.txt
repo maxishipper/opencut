@@ -1,5 +1,7 @@
 modal
 openai-whisper
+fastapi[standard]
+sentry-sdk
 boto3
 pydantic
 cryptography
