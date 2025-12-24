@@ -322,7 +322,7 @@ export default function ProjectsPage() {
           <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
             {Array.from({ length: 8 }, (_, index) => (
               <div
-                key={`skeleton-${index}-${Date.now()}`}
+                key={`skeleton-${index}`}
                 className="overflow-hidden bg-background border-none p-0"
               >
                 <Skeleton className="aspect-square w-full bg-muted/50" />
@@ -442,14 +442,12 @@ function ProjectCard({
 
   const cardContent = (
     <Card
-      className={`overflow-hidden bg-background border-none p-0 transition-all ${
-        isSelectionMode && isSelected ? "ring-2 ring-primary" : ""
-      }`}
+      className={`overflow-hidden bg-background border-none p-0 transition-all ${isSelectionMode && isSelected ? "ring-2 ring-primary" : ""
+        }`}
     >
       <div
-        className={`relative aspect-square bg-muted transition-opacity ${
-          isDropdownOpen ? "opacity-65" : "opacity-100 group-hover:opacity-65"
-        }`}
+        className={`relative aspect-square bg-muted transition-opacity ${isDropdownOpen ? "opacity-65" : "opacity-100 group-hover:opacity-65"
+          }`}
       >
         {isSelectionMode && (
           <div className="absolute top-3 left-3 z-10">
@@ -500,11 +498,10 @@ function ProjectCard({
                 <Button
                   variant="text"
                   size="sm"
-                  className={`size-6 p-0 transition-all shrink-0 ml-2 ${
-                    isDropdownOpen
-                      ? "opacity-100"
-                      : "opacity-0 group-hover:opacity-100"
-                  }`}
+                  className={`size-6 p-0 transition-all shrink-0 ml-2 ${isDropdownOpen
+                    ? "opacity-100"
+                    : "opacity-0 group-hover:opacity-100"
+                    }`}
                   onClick={(e) => e.preventDefault()}
                 >
                   <MoreHorizontal />
@@ -564,7 +561,7 @@ function ProjectCard({
   );
 
   return (
-    <>
+    <div className="contents">
       {isSelectionMode ? (
         <button
           type="button"
@@ -590,7 +587,7 @@ function ProjectCard({
         onConfirm={handleRenameProject}
         projectName={project.name}
       />
-    </>
+    </div>
   );
 }
 
