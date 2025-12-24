@@ -47,7 +47,13 @@ class StorageService {
       this.config.version
     );
 
-    const mediaFilesAdapter = new OPFSAdapter(`media-files-${projectId}`);
+    const mediaFilesAdapter = OPFSAdapter.isSupported()
+      ? new OPFSAdapter(`media-files-${projectId}`)
+      : new IndexedDBAdapter<File>(
+        `${this.config.mediaDb}-files-${projectId}`,
+        "media-files",
+        this.config.version
+      );
 
     return { mediaMetadataAdapter, mediaFilesAdapter };
   }

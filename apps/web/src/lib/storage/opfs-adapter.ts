@@ -68,6 +68,14 @@ export class OPFSAdapter implements StorageAdapter<File> {
 
   // Helper method to check OPFS support
   static isSupported(): boolean {
-    return "storage" in navigator && "getDirectory" in navigator.storage;
+    return (
+      typeof window !== "undefined" &&
+      "storage" in navigator &&
+      "getDirectory" in navigator.storage &&
+      // Check if FileSystemFileHandle has createWritable (some browsers like Safari 
+      // only support it in Workers)
+      "FileSystemFileHandle" in window &&
+      "createWritable" in FileSystemFileHandle.prototype
+    );
   }
 }

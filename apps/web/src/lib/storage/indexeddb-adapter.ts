@@ -35,7 +35,21 @@ export class IndexedDBAdapter<T> implements StorageAdapter<T> {
     return new Promise((resolve, reject) => {
       const request = store.get(key);
       request.onerror = () => reject(request.error);
-      request.onsuccess = () => resolve(request.result || null);
+      request.onsuccess = () => {
+        const result = request.result;
+        if (!result) {
+          resolve(null);
+          return;
+        }
+        // If it was stored as a wrapper, return the data part
+        if (result && typeof result === "object" && "data" in result) {
+          resolve(result.data as T);
+        } else {
+          // Backward compatibility: if it was stored with id at top level
+          const { id, ...data } = result;
+          resolve(Object.keys(data).length === 0 ? result : data as T);
+        }
+      };
     });
   }
 
@@ -45,7 +59,9 @@ export class IndexedDBAdapter<T> implements StorageAdapter<T> {
     const store = transaction.objectStore(this.storeName);
 
     return new Promise((resolve, reject) => {
-      const request = store.put({ id: key, ...value });
+      // For File/Blob or primitives, we wrap them
+      // For objects, we can either wrap or spread. Wrapping is safer for all types.
+      const request = store.put({ id: key, data: value });
       request.onerror = () => reject(request.error);
       request.onsuccess = () => resolve();
     });
