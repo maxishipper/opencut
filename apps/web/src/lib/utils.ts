@@ -78,3 +78,28 @@ export function getPlatformSpecialKey() {
 export function getPlatformAlternateKey() {
   return isAppleDevice() ? "⌥" : "Alt";
 }
+
+/**
+ * A safe wrapper for requestIdleCallback with a fallback to setTimeout for browsers that don't support it (e.g., Safari).
+ */
+export function safeRequestIdleCallback(
+  callback: (deadline: {
+    readonly didTimeout: boolean;
+    timeRemaining: () => number;
+  }) => void,
+  options?: { timeout?: number }
+): number {
+  if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+    return (window as any).requestIdleCallback(callback, options);
+  }
+
+  // Fallback to setTimeout
+  const start = Date.now();
+  return setTimeout(() => {
+    callback({
+      didTimeout: false,
+      timeRemaining: () => Math.max(0, 50 - (Date.now() - start)),
+    });
+  }, 1) as unknown as number;
+}
+

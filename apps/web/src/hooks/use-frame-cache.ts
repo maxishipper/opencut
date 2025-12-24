@@ -7,6 +7,7 @@ import {
 } from "@/types/timeline";
 import { MediaFile } from "@/types/media";
 import { TProject } from "@/types/project";
+import { safeRequestIdleCallback } from "@/lib/utils";
 
 interface CachedFrame {
   imageData: ImageData;
@@ -316,7 +317,7 @@ export function useFrameCache(options: FrameCacheOptions = {}) {
 
       // Pre-render during idle time
       for (const time of toSchedule) {
-        requestIdleCallback(async () => {
+        safeRequestIdleCallback(async () => {
           try {
             const imageData = await renderFunction(time);
             cacheFrame(
